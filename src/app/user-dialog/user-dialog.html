@@ -1,0 +1,15 @@
+<h3 mat-dialog-title>Felhasználó hozzáadása</h3>
+
+<mat-dialog-content>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Név</mat-label>
+    <input matInput [(ngModel)]="name" />
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="center">
+  <button mat-button mat-dialog-close>Mégse</button>
+  <button mat-raised-button color="primary" (click)="submit()">
+    OK
+  </button>
+</mat-dialog-actions>

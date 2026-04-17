@@ -1,0 +1,16 @@
+<div class="container">
+  <mat-card>
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Név</mat-label>
+        <input matInput [(ngModel)]="enteredUsername" />
+      </mat-form-field>
+
+      <div class="button-container">
+        <button mat-raised-button color="primary" (click)="onSubmit()">
+          Bejelentkezés
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,39 @@
+.user-list {
+  padding: 24px;
+  font-family: sans-serif;
+  max-width: 600px; // Korlátozzuk a szélességet a lista jelleg miatt
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+    color: #1a1a1a;
+  }
+}
+
+.list-container {
+  border-top: 1px solid #eee;
+}
+
+.user-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 8px;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #f9f9f9;
+  }
+
+  .user-id {
+    font-weight: bold;
+    color: #888;
+    width: 50px;
+    font-size: 0.9rem;
+  }
+
+  .user-name {
+    color: #333;
+    font-size: 1rem;
+  }
+}

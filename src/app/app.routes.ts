@@ -3,41 +3,55 @@ import { Login } from './login/login';
 import { User } from './user/user';
 import { inject } from '@angular/core/primitives/di';
 import { UserService } from './services/user-service';
-import { Observable } from 'rxjs';
+import { Applications } from './applications/applications';
 
 export const userResolver: ResolveFn<any> = (route: ActivatedRouteSnapshot) => {
-  const userService = inject(UserService);
-  const username = route.paramMap.get('username');
-  if (!username) {
-    return null;
-  }
-  return userService.getUser(username);
+    const userService = inject(UserService);
+    const username = route.paramMap.get('username');
+    if (!username) {
+        return null;
+    }
+    return userService.getUser(username);
+};
+
+export const applicationsResolver: ResolveFn<any> = () => {
+    const userService = inject(UserService);
+    return userService.getApplications();
 };
 
 export const routes: Routes = [
     {
-    path: '',
-    component: Login,
-  },
-{
-    path: 'user/:username',
-    component: User,
-    canActivate: [(route: ActivatedRouteSnapshot) => {
-        const router = inject(Router);
-        
-        const storedUsername = localStorage.getItem('username');
-        const routeUsername = route.paramMap.get('username');
-        if(storedUsername && storedUsername === routeUsername) {
-            return true;
-        }
-        return router.createUrlTree(['']);
-    }],
-    resolve: {
-        user: userResolver
+        path: '',
+        component: Login,
     },
-  },
-  {
-    path: '**',
-    redirectTo: '',
-  }
+    {
+        path: 'user/:username',
+        component: User,
+        canActivate: [(route: ActivatedRouteSnapshot) => {
+            const router = inject(Router);
+
+            const storedUsername = localStorage.getItem('username');
+            const routeUsername = route.paramMap.get('username');
+            if (storedUsername && storedUsername === routeUsername) {
+                return true;
+            }
+            return router.createUrlTree(['']);
+        }],
+        resolve: {
+            user: userResolver
+        },
+        children: [
+            {
+                path: 'apps',
+                component: Applications,
+                resolve: {
+                    applicationList: applicationsResolver
+                },
+            }
+        ]
+    },
+    {
+        path: '**',
+        redirectTo: '',
+    }
 ];

@@ -3,7 +3,7 @@
 
     <span class="spacer"></span>
 
-    <a mat-button routerLink="/apps">Alkalmazások</a>
+    <a mat-button routerLink="apps">Alkalmazások</a>
     @if(user()?.isAdmin) {
         <button mat-button (click)="addUser()">Felhasználók hozzáadása</button>
     }
@@ -11,5 +11,6 @@
 </mat-toolbar>
     <div class="user-info">
         
-        <p>{{ user() | json  }}</p>
+        <h2>Hello, {{ user()?.name }} :)!</h2>
+        <router-outlet />
     </div>

@@ -1,0 +1,19 @@
+<mat-list>
+    @for (app of applicationList(); track $index) {
+    <mat-list-item>
+        <div class="row">
+            <span>{{ app.name }}</span>
+
+            <div class="actions">
+                <button mat-icon-button (click)="onAdd(app)">
+                    <mat-icon>add</mat-icon>
+                </button>
+
+                <button mat-icon-button (click)="onDelete(app)">
+                    <mat-icon color="warn">delete</mat-icon>
+                </button>
+            </div>
+        </div>
+    </mat-list-item>
+    }
+</mat-list>

@@ -1,15 +1,14 @@
 import { Component, inject, input, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { UserDialog } from '../user-dialog/user-dialog';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
-import { JsonPipe } from '@angular/common';
 import { IUser } from '../types';
 
 @Component({
   selector: 'app-user',
-  imports: [MatToolbarModule, MatButtonModule, JsonPipe],
+  imports: [MatToolbarModule, MatButtonModule, RouterOutlet, RouterLink],
   templateUrl: './user.html',
   styleUrl: './user.scss',
 })

@@ -10,3 +10,7 @@ export interface MenuItem {
     icon: string;
     route: string;
 }
+
+export interface IApplication {
+    name: string;
+}

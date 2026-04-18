@@ -19,4 +19,8 @@ export class UserService {
   public createUser(user: IUser) {
     return this.http.post('/api/users', user);
   }
+
+  public getApplications() {
+    return this.http.get<any[]>('/api/apps');
+  }
 }

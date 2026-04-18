@@ -6,6 +6,10 @@
         <input matInput [(ngModel)]="enteredUsername" />
       </mat-form-field>
 
+        <!-- @if (errorMsg) {
+            <p class="error-message">{{ errorMsg }}</p>
+        } -->
+
       <div class="button-container">
         <button mat-raised-button color="primary" (click)="onSubmit()">
           Bejelentkezés

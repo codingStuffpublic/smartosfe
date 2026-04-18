@@ -1,19 +1,31 @@
-import { Component, inject, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, inject, input, signal } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { UserDialog } from '../user-dialog/user-dialog';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { JsonPipe } from '@angular/common';
+import { IUser } from '../types';
 
 @Component({
   selector: 'app-user',
-  imports: [],
+  imports: [MatToolbarModule, MatButtonModule, JsonPipe],
   templateUrl: './user.html',
   styleUrl: './user.scss',
 })
 export class User {
-  username = signal('');
-  private activatedRoute = inject(ActivatedRoute);
+    protected readonly title = signal('smartosfe');
+  router = inject(Router);
+  dialog = inject(MatDialog);
+  user = input<IUser>();
 
-  ngOnInit() {
-    this.activatedRoute.paramMap.subscribe(params => {
-        this.username.set(params.get('username') ?? '');
-    });
+    onLogout() {
+    localStorage.removeItem('username');
+    this.router.navigate(['/']);
+  
+  }
+
+  addUser() {
+    this.dialog.open(UserDialog);
   }
 }

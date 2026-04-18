@@ -2,12 +2,31 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { HttpInterceptorFn, provideHttpClient, withInterceptors } from '@angular/common/http';
+
+
+export const usernameInterceptor: HttpInterceptorFn = (req, next) => {
+  const username = localStorage.getItem('username');
+
+  if (!username) {
+    return next(req);
+  }
+
+  const cloned = req.clone({
+    setHeaders: {
+      'X-username': username
+    }
+  });
+
+  return next(cloned);
+};
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withComponentInputBinding()),
-    provideHttpClient()
+    provideHttpClient(
+      withInterceptors([usernameInterceptor])
+    )
   ]
 };

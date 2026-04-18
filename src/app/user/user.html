@@ -1,1 +1,15 @@
-<p>Welcome {{ username() }}</p>
+<mat-toolbar color="primary">
+    <span class="title">Smart OS</span>
+
+    <span class="spacer"></span>
+
+    <a mat-button routerLink="/apps">Alkalmazások</a>
+    @if(user()?.isAdmin) {
+        <button mat-button (click)="addUser()">Felhasználók hozzáadása</button>
+    }
+    <button mat-button (click)="onLogout()">Kijelentkezés</button>
+</mat-toolbar>
+    <div class="user-info">
+        
+        <p>{{ user() | json  }}</p>
+    </div>

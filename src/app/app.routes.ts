@@ -5,6 +5,7 @@ import { inject } from '@angular/core/primitives/di';
 import { UserService } from './services/user-service';
 import { Applications } from './applications/applications';
 import { Users } from './users/users';
+import { Menu } from './menu/menu';
 
 export const userResolver: ResolveFn<any> = (route: ActivatedRouteSnapshot) => {
     const userService = inject(UserService);
@@ -60,7 +61,11 @@ export const routes: Routes = [
                 resolve: {
                     users: usersResolver
                 },
-            }
+            },
+            {
+            path: 'menu',
+            component: Menu,
+        }
         ]
     },
     {

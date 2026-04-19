@@ -1,0 +1,202 @@
+// menu-editor.component.ts
+import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTreeNestedDataSource } from '@angular/material/tree';
+import { NestedTreeControl } from '@angular/cdk/tree';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTreeModule } from '@angular/material/tree';
+import { MatListModule } from '@angular/material/list';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+
+interface MenuItem {
+  id: number;
+  name: string;
+  application: { id: number; name: string } | null;
+  subItems: MenuItem[];
+}
+
+interface Application {
+  id: number;
+  name: string;
+}
+
+@Component({
+  selector: 'app-menu-editor',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatTreeModule,
+    MatButtonModule,
+    MatIconModule,
+    MatListModule,
+    MatInputModule,
+    MatDialogModule,
+  ],
+  template: `
+    <div style="display: flex; gap: 24px; padding: 16px;">
+
+      <!-- BAL: menüstruktúra -->
+      <div style="flex: 1;">
+        <h3>Menü</h3>
+        <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+
+          <!-- Levél elem (app) -->
+          <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+            <mat-icon>apps</mat-icon>
+            <span *ngIf="editingId !== node.id">{{ node.name }}</span>
+            <input *ngIf="editingId === node.id" [(ngModel)]="editingName" style="width:120px"/>
+            <button mat-icon-button *ngIf="editingId !== node.id" (click)="startEdit(node)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button *ngIf="editingId === node.id" (click)="saveEdit(node)">
+              <mat-icon>check</mat-icon>
+            </button>
+            <button mat-icon-button (click)="deleteItem(node)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-tree-node>
+
+          <!-- Mappa elem (almenü) -->
+          <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+            <button mat-icon-button matTreeNodeToggle>
+              <mat-icon>{{ treeControl.isExpanded(node) ? 'folder_open' : 'folder' }}</mat-icon>
+            </button>
+            <span *ngIf="editingId !== node.id">{{ node.name }}</span>
+            <input *ngIf="editingId === node.id" [(ngModel)]="editingName" style="width:120px"/>
+            <button mat-icon-button *ngIf="editingId !== node.id" (click)="startEdit(node)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button *ngIf="editingId === node.id" (click)="saveEdit(node)">
+              <mat-icon>check</mat-icon>
+            </button>
+            <button mat-icon-button (click)="deleteItem(node)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-tree-node>
+
+        </mat-tree>
+      </div>
+
+      <!-- JOBB: elérhető appok -->
+      <div style="flex: 1;">
+        <h3>Elérhető alkalmazások</h3>
+        <mat-list>
+          <mat-list-item *ngFor="let app of applications">
+            {{ app.name }}
+            <button mat-button (click)="addAppToMenu(app)">+ Főmenübe</button>
+            <button mat-button (click)="openFolderDialog(app)">+ Mappába</button>
+          </mat-list-item>
+        </mat-list>
+
+        <hr/>
+        <h3>Új mappa</h3>
+        <mat-form-field>
+          <input matInput [(ngModel)]="newFolderName" placeholder="Mappa neve"/>
+        </mat-form-field>
+        <button mat-raised-button (click)="createFolder()">Létrehozás</button>
+      </div>
+
+    </div>
+  `
+})
+export class MenuEditorComponent implements OnInit {
+
+  private apiUrl = 'http://localhost:8080/api';
+  username = 'admin'; // TODO: bejelentkezett user
+
+  treeControl = new NestedTreeControl<MenuItem>(node => node.subItems);
+  dataSource = new MatTreeNestedDataSource<MenuItem>();
+
+  applications: Application[] = [];
+  editingId: number | null = null;
+  editingName = '';
+  newFolderName = '';
+
+  selectedFolderApp: Application | null = null;
+  folderTargetId: number | null = null;
+
+  constructor(private http: HttpClient) {}
+
+  ngOnInit() {
+    this.loadMenu();
+    this.loadApps();
+  }
+
+  private headers() {
+    return { headers: new HttpHeaders({ 'X-username': this.username }) };
+  }
+
+  loadMenu() {
+    this.http.get<MenuItem[]>(`${this.apiUrl}/menu`, this.headers()).subscribe(items => {
+      this.dataSource.data = items;
+      this.treeControl.dataNodes = items;
+    });
+  }
+
+  loadApps() {
+    this.http.get<Application[]>(`${this.apiUrl}/apps`).subscribe(apps => {
+      this.applications = apps;
+    });
+  }
+
+  hasChild = (_: number, node: MenuItem) => node.subItems && node.subItems.length > 0;
+
+  addAppToMenu(app: Application) {
+    this.http.post(`${this.apiUrl}/menu/folder`,
+      [app.id],
+      { ...this.headers(), params: { folderName: app.name } }
+    ).subscribe(() => this.loadMenu());
+  }
+
+  createFolder() {
+    if (!this.newFolderName.trim()) return;
+    this.http.post(`${this.apiUrl}/menu/folder`,
+      [],
+      { ...this.headers(), params: { folderName: this.newFolderName } }
+    ).subscribe(() => {
+      this.newFolderName = '';
+      this.loadMenu();
+    });
+  }
+
+  openFolderDialog(app: Application) {
+    const folderName = prompt('Melyik mappa nevébe? (pontosan)');
+    if (!folderName) return;
+    const menu = this.dataSource.data;
+    const folder = menu.find(m => m.name === folderName && m.application === null);
+    if (!folder) {
+      alert('Nem található ilyen mappa.');
+      return;
+    }
+    this.http.post(`${this.apiUrl}/menu/folder`,
+      [app.id],
+      { ...this.headers(), params: { folderName: folder.name } }
+    ).subscribe(() => this.loadMenu());
+  }
+
+  startEdit(node: MenuItem) {
+    this.editingId = node.id;
+    this.editingName = node.name;
+  }
+
+  saveEdit(node: MenuItem) {
+    this.http.put(`${this.apiUrl}/menu/${node.id}`,
+      null,
+      { ...this.headers(), params: { name: this.editingName } }
+    ).subscribe(() => {
+      this.editingId = null;
+      this.loadMenu();
+    });
+  }
+
+  deleteItem(node: MenuItem) {
+    this.http.delete(`${this.apiUrl}/menu/${node.id}`, this.headers())
+      .subscribe(() => this.loadMenu());
+  }
+}

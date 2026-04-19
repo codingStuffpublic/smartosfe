@@ -1,0 +1,112 @@
+<div class="menu-container">
+
+  <div class="menu-list">
+    <h3>Menü</h3>
+    <mat-list>
+      @for (item of menuItems(); track item.id) {
+
+        <mat-list-item>
+          <mat-icon matListItemIcon>
+            {{ item.application ? (item.iconName ?? 'apps') : 'folder' }}
+          </mat-icon>
+          <span matListItemTitle>
+            @if (editingId !== item.id) { {{ item.name }} }
+            @else { <input [(ngModel)]="editingName" (keyup.enter)="saveEdit(item)" /> }
+          </span>
+          <div matListItemMeta class="actions">
+            @if (!item.application) {
+              <button mat-icon-button (click)="toggleFolder(item.id)">
+                <mat-icon>{{ expandedFolderId === item.id ? 'expand_less' : 'expand_more' }}</mat-icon>
+              </button>
+              <button mat-icon-button (click)="toggleAddToFolder(item.id)">
+                <mat-icon>playlist_add</mat-icon>
+              </button>
+            } @else {
+              <button mat-icon-button (click)="toggleIconPicker(item)">
+                <mat-icon>palette</mat-icon>
+              </button>
+            }
+            @if (editingId !== item.id) {
+              <button mat-icon-button (click)="startEdit(item)"><mat-icon>edit</mat-icon></button>
+            } @else {
+              <button mat-icon-button (click)="saveEdit(item)"><mat-icon>check</mat-icon></button>
+            }
+            <button mat-icon-button color="warn" (click)="deleteItem(item)"><mat-icon>delete</mat-icon></button>
+          </div>
+        </mat-list-item>
+
+        @if (iconPickerId === item.id) {
+          <div class="icon-picker">
+            @for (icon of icons; track icon) {
+              <button mat-icon-button (click)="setIcon(item, icon)"><mat-icon>{{ icon }}</mat-icon></button>
+            }
+          </div>
+        }
+
+        @if (!item.application && expandedFolderId === item.id) {
+          @for (sub of item.subItems; track sub.id) {
+            <mat-list-item class="sub-item">
+              <mat-icon matListItemIcon>{{ sub.iconName ?? 'apps' }}</mat-icon>
+              <span matListItemTitle>
+                @if (editingId !== sub.id) { {{ sub.name }} }
+                @else { <input [(ngModel)]="editingName" (keyup.enter)="saveEdit(item)" /> }
+              </span>
+              <div matListItemMeta class="actions">
+                <button mat-icon-button (click)="toggleIconPicker(sub)"><mat-icon>palette</mat-icon></button>
+                @if (editingId !== sub.id) {
+                  <button mat-icon-button (click)="startEdit(sub)"><mat-icon>edit</mat-icon></button>
+                } @else {
+                  <button mat-icon-button (click)="saveEdit(sub)"><mat-icon>check</mat-icon></button>
+                }
+                <button mat-icon-button color="warn" (click)="deleteItem(sub)"><mat-icon>delete</mat-icon></button>
+              </div>
+            </mat-list-item>
+            @if (iconPickerId === sub.id) {
+              <div class="icon-picker">
+                @for (icon of icons; track icon) {
+                  <button mat-icon-button (click)="setIcon(sub, icon)"><mat-icon>{{ icon }}</mat-icon></button>
+                }
+              </div>
+            }
+          }
+
+          @if (addingToFolderId === item.id) {
+            <div class="add-to-folder">
+              <span>App hozzáadása:</span>
+              @for (app of applications(); track app.id) {
+                <button mat-button (click)="addAppToFolder(item, app)">
+                  <mat-icon>add</mat-icon>{{ app.name }}
+                </button>
+              }
+            </div>
+          }
+        }
+      }
+    </mat-list>
+  </div>
+
+  <div class="app-list">
+    <h3>App hozzáadása főmenühöz</h3>
+    <mat-list>
+      @for (app of applications(); track app.id) {
+        <mat-list-item>
+          <mat-icon matListItemIcon>apps</mat-icon>
+          <span matListItemTitle>{{ app.name }}</span>
+          <div matListItemMeta>
+            <button mat-icon-button (click)="addAppToMenu(app)"><mat-icon>add</mat-icon></button>
+          </div>
+        </mat-list-item>
+      }
+    </mat-list>
+
+    <hr/>
+    <h3>Új mappa</h3>
+    <div class="folder-create">
+      <input [(ngModel)]="newFolderName" placeholder="Mappa neve" />
+      <button mat-raised-button color="primary" (click)="createFolder()">
+        <mat-icon>create_new_folder</mat-icon> Létrehozás
+      </button>
+    </div>
+  </div>
+
+</div>

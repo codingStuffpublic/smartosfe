@@ -2,15 +2,18 @@ export interface IUser {
     name: string;
     isAdmin: boolean;
     background: string;
-    menuItems: MenuItem[];
+    menuItems: IMenuItem[];
 }
 
-export interface MenuItem {
-    label: string;
-    icon: string;
-    route: string;
+export interface IMenuItem {
+    id: number;
+    name: string;
+    iconName: string | null;
+    application: IApplication | null;
+    subItems: IMenuItem[];
 }
 
 export interface IApplication {
+    id: number;
     name: string;
 }

@@ -39,4 +39,13 @@
     padding: 8px;
     font-size: 14px;
   }
+
+  ::ng-deep .selected {
+    background: #e3f2fd !important;
+}
+
+mat-list-item.selected {
+  background-color: #e3f2fd !important;
+  border-left: 4px solid #1976d2;
+}
 }

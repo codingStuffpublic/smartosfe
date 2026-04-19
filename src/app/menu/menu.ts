@@ -16,7 +16,11 @@ export class Menu implements OnInit {
   private http = inject(HttpClient);
 
   readonly icons = ['home', 'star', 'favorite', 'map', 'brush', 'sports_esports', 'contacts', 'search', 'settings', 'apps', 'work'];
+selectedItem: IMenuItem | null = null;
 
+selectItem(item: IMenuItem) {
+    this.selectedItem = item;
+}
   menuItems = signal<IMenuItem[]>([]);
   applications = signal<IApplication[]>([]);
   editingId: number | null = null;
@@ -39,16 +43,13 @@ export class Menu implements OnInit {
     this.http.get<IApplication[]>('/api/apps').subscribe(apps => this.applications.set(apps));
   }
 
-  addAppToMenu(app: IApplication) {
-    this.http.post('/api/menu/app', [app.id]).subscribe(() => this.loadMenu());
-  }
-
-addAppToFolder(folder: IMenuItem, app: IApplication) {
-    this.http.post(`/api/menu/${folder.id}/app/${app.id}`, null)
-      .subscribe(() => {
-        this.addingToFolderId = null;
-        this.loadMenu();
-      });
+ addApp(application: IApplication) {
+    if (this.selectedItem && !this.selectedItem.application) {
+        this.http.post(`/api/menu/${this.selectedItem.id}/app/${application.id}`, null)
+            .subscribe(() => this.loadMenu());
+    } else {
+        this.http.post('/api/menu/app', [application.id]).subscribe(() => this.loadMenu());
+    }
 }
 
   createFolder() {

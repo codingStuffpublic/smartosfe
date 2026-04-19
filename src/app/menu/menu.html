@@ -5,7 +5,11 @@
     <mat-list>
       @for (item of menuItems(); track item.id) {
 
-        <mat-list-item>
+        <mat-list-item 
+  [class.selected]="selectedItem?.id === item.id"
+  [style.background-color]="selectedItem?.id === item.id ? '#e3f2fd' : ''"
+  [style.border-left]="selectedItem?.id === item.id ? '4px solid #1976d2' : ''"
+  (click)="selectItem(item)">
           <mat-icon matListItemIcon>
             {{ item.application ? (item.iconName ?? 'apps') : 'folder' }}
           </mat-icon>
@@ -15,23 +19,20 @@
           </span>
           <div matListItemMeta class="actions">
             @if (!item.application) {
-              <button mat-icon-button (click)="toggleFolder(item.id)">
+              <button mat-icon-button (click)="toggleFolder(item.id); $event.stopPropagation()">
                 <mat-icon>{{ expandedFolderId === item.id ? 'expand_less' : 'expand_more' }}</mat-icon>
               </button>
-              <button mat-icon-button (click)="toggleAddToFolder(item.id)">
-                <mat-icon>playlist_add</mat-icon>
-              </button>
             } @else {
-              <button mat-icon-button (click)="toggleIconPicker(item)">
+              <button mat-icon-button (click)="toggleIconPicker(item); $event.stopPropagation()">
                 <mat-icon>palette</mat-icon>
               </button>
             }
             @if (editingId !== item.id) {
-              <button mat-icon-button (click)="startEdit(item)"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button (click)="startEdit(item); $event.stopPropagation()"><mat-icon>edit</mat-icon></button>
             } @else {
-              <button mat-icon-button (click)="saveEdit(item)"><mat-icon>check</mat-icon></button>
+              <button mat-icon-button (click)="saveEdit(item); $event.stopPropagation()"><mat-icon>check</mat-icon></button>
             }
-            <button mat-icon-button color="warn" (click)="deleteItem(item)"><mat-icon>delete</mat-icon></button>
+            <button mat-icon-button color="warn" (click)="deleteItem(item); $event.stopPropagation()"><mat-icon>delete</mat-icon></button>
           </div>
         </mat-list-item>
 
@@ -49,7 +50,7 @@
               <mat-icon matListItemIcon>{{ sub.iconName ?? 'apps' }}</mat-icon>
               <span matListItemTitle>
                 @if (editingId !== sub.id) { {{ sub.name }} }
-                @else { <input [(ngModel)]="editingName" (keyup.enter)="saveEdit(item)" /> }
+                @else { <input [(ngModel)]="editingName" (keyup.enter)="saveEdit(sub)" /> }
               </span>
               <div matListItemMeta class="actions">
                 <button mat-icon-button (click)="toggleIconPicker(sub)"><mat-icon>palette</mat-icon></button>
@@ -69,31 +70,20 @@
               </div>
             }
           }
-
-          @if (addingToFolderId === item.id) {
-            <div class="add-to-folder">
-              <span>App hozzáadása:</span>
-              @for (app of applications(); track app.id) {
-                <button mat-button (click)="addAppToFolder(item, app)">
-                  <mat-icon>add</mat-icon>{{ app.name }}
-                </button>
-              }
-            </div>
-          }
         }
       }
     </mat-list>
   </div>
 
   <div class="app-list">
-    <h3>App hozzáadása főmenühöz</h3>
+    <h3>{{ selectedItem && !selectedItem.application ? selectedItem.name + '-ba' : 'Főmenühöz' }}</h3>
     <mat-list>
       @for (app of applications(); track app.id) {
         <mat-list-item>
           <mat-icon matListItemIcon>apps</mat-icon>
           <span matListItemTitle>{{ app.name }}</span>
           <div matListItemMeta>
-            <button mat-icon-button (click)="addAppToMenu(app)"><mat-icon>add</mat-icon></button>
+            <button mat-icon-button (click)="addApp(app)"><mat-icon>add</mat-icon></button>
           </div>
         </mat-list-item>
       }

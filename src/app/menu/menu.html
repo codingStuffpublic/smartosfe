@@ -9,7 +9,7 @@
   [class.selected]="selectedItem?.id === item.id"
   [style.background-color]="selectedItem?.id === item.id ? '#e3f2fd' : ''"
   [style.border-left]="selectedItem?.id === item.id ? '4px solid #1976d2' : ''"
-  (click)="selectItem(item)">
+  (click)="!item.application && selectItem(item)">
           <mat-icon matListItemIcon>
             {{ item.application ? (item.iconName ?? 'apps') : 'folder' }}
           </mat-icon>
@@ -76,7 +76,7 @@
   </div>
 
   <div class="app-list">
-    <h3>{{ selectedItem && !selectedItem.application ? selectedItem.name + '-ba' : 'Főmenühöz' }}</h3>
+    <h3>{{ selectedItem && !selectedItem.application ? selectedItem.name  : 'Főmenühöz' }}</h3>
     <mat-list>
       @for (app of applications(); track app.id) {
         <mat-list-item>

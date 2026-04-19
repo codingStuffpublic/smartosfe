@@ -6,6 +6,7 @@ import { UserService } from './services/user-service';
 import { Applications } from './applications/applications';
 import { Users } from './users/users';
 import { Menu } from './menu/menu';
+import { Device } from './device/device';
 
 export const userResolver: ResolveFn<any> = (route: ActivatedRouteSnapshot) => {
     const userService = inject(UserService);
@@ -63,9 +64,13 @@ export const routes: Routes = [
                 },
             },
             {
-            path: 'menu',
-            component: Menu,
-        }
+                path: 'menu',
+                component: Menu,
+            },
+            {
+                path: 'device',
+                component: Device,
+            }
         ]
     },
     {

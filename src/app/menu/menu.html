@@ -1,15 +1,15 @@
-<div class="menu-container">
+<div class="menu-container" (click)="selectedItem = null">
 
   <div class="menu-list">
     <h3>Menü</h3>
     <mat-list>
       @for (item of menuItems(); track item.id) {
 
-        <mat-list-item 
-  [class.selected]="selectedItem?.id === item.id"
-  [style.background-color]="selectedItem?.id === item.id ? '#e3f2fd' : ''"
-  [style.border-left]="selectedItem?.id === item.id ? '4px solid #1976d2' : ''"
-  (click)="!item.application && selectItem(item)">
+     <mat-list-item
+          [class.selected]="selectedItem?.id === item.id"
+          [style.background-color]="selectedItem?.id === item.id ? '#e3f2fd' : ''"
+          [style.border-left]="selectedItem?.id === item.id ? '4px solid #1976d2' : ''"
+          (click)="!item.application && selectItem(item); $event.stopPropagation()">
           <mat-icon matListItemIcon>
             {{ item.application ? (item.iconName ?? 'apps') : 'folder' }}
           </mat-icon>

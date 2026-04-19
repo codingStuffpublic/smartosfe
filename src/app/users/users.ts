@@ -1,14 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { Component , inject,  input,  signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { IUser } from '../types';
-
-interface User {
-  name: string;
-  id: number;
-}
 
 @Component({
   selector: 'app-users',
@@ -16,15 +11,23 @@ interface User {
   templateUrl: './users.html',
   styleUrl: './users.scss',
 })
-export class Users {
+export class Users implements OnInit {
   private http = inject(HttpClient);
-  users = input<IUser[]>();
+  users = signal<IUser[]>([]);
 
-  onAdd(app: IUser) {
-    console.log('add', app);
+  ngOnInit() {
+    this.loadUsers();
   }
 
-  onDelete(app: IUser) {
-    console.log('delete', app);
+  loadUsers() {
+    this.http.get<IUser[]>('/api/users').subscribe(users => this.users.set(users));
   }
+
+  onDelete(user: IUser) {
+    this.http.delete(`/api/users/${user.name}`).subscribe(() => this.loadUsers());
+  }
+
+  onAdd(user: IUser) {
+    console.log('add', user);
+}
 }

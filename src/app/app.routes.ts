@@ -57,11 +57,10 @@ export const routes: Routes = [
                 },
             },
             {
-                path: 'users',
-                component: Users,
-                resolve: {
-                    users: usersResolver
-                },
+                
+    path: 'users',
+    component: Users,
+
             },
             {
                 path: 'menu',

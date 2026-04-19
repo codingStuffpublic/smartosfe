@@ -1,13 +1,16 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Users } from './users/users';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Users],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('smartosfe');
+
 }
+
+// TODO: interceptor ami mindig elküldi a username-et
+// TODO: service ami kezeli az http hívásokat
+

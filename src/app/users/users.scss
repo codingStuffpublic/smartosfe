@@ -37,3 +37,30 @@
     font-size: 1rem;
   }
 }
+
+
+
+.app-name {
+  font-size: 14px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+mat-list-item {
+  display: flex;
+  align-items: center;
+}
+
+.row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.actions {
+  display: flex;
+  gap: 4px;
+}

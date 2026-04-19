@@ -4,11 +4,12 @@
     <span class="spacer"></span>
 
     <a mat-button routerLink="apps">Alkalmazások</a>
+    <a mat-button routerLink="users">Felhasználók</a>
     @if(user()?.isAdmin) {
-        <button mat-button (click)="addUser()">Felhasználók hozzáadása</button>
+        <button mat-button (click)="addUser()">Felhasználó hozzáadása</button>
     }
     <button mat-button (click)="onLogout()">Kijelentkezés</button>
-</mat-toolbar>
+    </mat-toolbar>
     <div class="user-info">
         
         <h2>Hello, {{ user()?.name }} :)!</h2>

@@ -16,29 +16,29 @@ import { IUser } from '../types';
 })
 export class Login {
   private router = inject(Router);
-  //private userService = inject(UserService);
+  private userService = inject(UserService);
+  protected registeredUsername: string = '';
+  protected registeredGroupname: string = '';
   protected enteredUsername: string = '';
-  //protected errorMsg: string | null = null;
 
-  onSubmit() {
-    // const user: IUser = {
-    //   name: this.enteredUsername,
-    //   isAdmin: true,
-    //   background: '',
-    //   menuItems: []
-    // };
-    // this.userService.createAdminUser(user).subscribe({
-    //   next: () => {
-    //     this.router.navigate(['/user', this.enteredUsername]);
-    //     localStorage.setItem('username', this.enteredUsername);
-    //     this.errorMsg = null;
-    //   },
-    //   error: (err) => {
-    //     this.errorMsg = 'Hiba bejelentkezésnél: ' + err.message;
-    //   }
-    // });
+  onLogin() {
+    this.userService.getUser(this.enteredUsername).subscribe(
+      () => {
+        this.navigateAndSave(this.enteredUsername);
+      }
+    );
+  }
 
-    this.router.navigate(['/user', this.enteredUsername]);
-    localStorage.setItem('username', this.enteredUsername);
+  onCreateGroup() {
+    this.userService.createGroup(this.registeredUsername, this.registeredGroupname).subscribe(
+      () => {
+        this.navigateAndSave(this.registeredUsername);
+      }
+    );
+  }
+
+  navigateAndSave(username: string) {
+    this.router.navigate(['/user', username]);
+    localStorage.setItem('username', username);
   }
 }

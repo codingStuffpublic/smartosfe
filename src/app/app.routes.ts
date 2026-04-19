@@ -4,6 +4,7 @@ import { User } from './user/user';
 import { inject } from '@angular/core/primitives/di';
 import { UserService } from './services/user-service';
 import { Applications } from './applications/applications';
+import { Users } from './users/users';
 
 export const userResolver: ResolveFn<any> = (route: ActivatedRouteSnapshot) => {
     const userService = inject(UserService);
@@ -17,6 +18,11 @@ export const userResolver: ResolveFn<any> = (route: ActivatedRouteSnapshot) => {
 export const applicationsResolver: ResolveFn<any> = () => {
     const userService = inject(UserService);
     return userService.getApplications();
+};
+    
+export const usersResolver: ResolveFn<any> = () => {
+    const userService = inject(UserService);
+    return userService.getUsers();
 };
 
 export const routes: Routes = [
@@ -46,6 +52,13 @@ export const routes: Routes = [
                 component: Applications,
                 resolve: {
                     applicationList: applicationsResolver
+                },
+            },
+            {
+                path: 'users',
+                component: Users,
+                resolve: {
+                    users: usersResolver
                 },
             }
         ]

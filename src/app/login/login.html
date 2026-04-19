@@ -1,4 +1,23 @@
 <div class="container">
+    <mat-card>
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Név</mat-label>
+        <input matInput [(ngModel)]="registeredUsername" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Csoport</mat-label>
+        <input matInput [(ngModel)]="registeredGroupname" />
+      </mat-form-field>
+
+      <div class="button-container">
+        <button mat-raised-button color="primary" (click)="onCreateGroup()">
+          Csoport létrehozása
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
   <mat-card>
     <mat-card-content>
       <mat-form-field appearance="outline" class="full-width">
@@ -6,12 +25,8 @@
         <input matInput [(ngModel)]="enteredUsername" />
       </mat-form-field>
 
-        <!-- @if (errorMsg) {
-            <p class="error-message">{{ errorMsg }}</p>
-        } -->
-
       <div class="button-container">
-        <button mat-raised-button color="primary" (click)="onSubmit()">
+        <button mat-raised-button color="primary" (click)="onLogin()">
           Bejelentkezés
         </button>
       </div>

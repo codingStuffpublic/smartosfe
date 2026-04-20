@@ -27,7 +27,7 @@ selectItem(item: IMenuItem) {
   editingName = '';
   newFolderName = '';
   iconPickerId: number | null = null;
-  expandedFolderId: number | null = null;
+  expandedFolderIds = new Set<number>();
   addingToFolderId: number | null = null;
 
   ngOnInit() {
@@ -60,9 +60,13 @@ selectItem(item: IMenuItem) {
     });
   }
 
-  toggleFolder(id: number) {
-    this.expandedFolderId = this.expandedFolderId === id ? null : id;
-  }
+toggleFolder(id: number) {
+    if (this.expandedFolderIds.has(id)) {
+        this.expandedFolderIds.delete(id);
+    } else {
+        this.expandedFolderIds.add(id);
+    }
+}
 
   toggleAddToFolder(id: number) {
     this.addingToFolderId = this.addingToFolderId === id ? null : id;

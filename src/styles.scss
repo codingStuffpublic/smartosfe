@@ -37,3 +37,20 @@ body {
   height: 100%;
 }
 /* You can add global styles to this file, and also import other style files */
+body.dark {
+  color-scheme: dark;
+  
+  html {
+    @include mat.theme(
+      (
+        color: (
+          primary: mat.$rose-palette,
+          tertiary: mat.$red-palette,
+          theme-type: dark,
+        ),
+        typography: Roboto,
+        density: 0,
+      )
+    );
+  }
+}

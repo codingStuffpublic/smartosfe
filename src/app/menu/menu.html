@@ -20,7 +20,7 @@
           <div matListItemMeta class="actions">
             @if (!item.application) {
               <button mat-icon-button (click)="toggleFolder(item.id); $event.stopPropagation()">
-                <mat-icon>{{ expandedFolderId === item.id ? 'expand_less' : 'expand_more' }}</mat-icon>
+                <mat-icon>{{ expandedFolderIds.has(item.id) ? 'expand_less' : 'expand_more' }}</mat-icon>
               </button>
             } @else {
               <button mat-icon-button (click)="toggleIconPicker(item); $event.stopPropagation()">
@@ -44,7 +44,7 @@
           </div>
         }
 
-        @if (!item.application && expandedFolderId === item.id) {
+       @if (!item.application && expandedFolderIds.has(item.id)) {
           @for (sub of item.subItems; track sub.id) {
             <mat-list-item class="sub-item">
               <mat-icon matListItemIcon>{{ sub.iconName ?? 'apps' }}</mat-icon>

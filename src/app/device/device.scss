@@ -38,3 +38,9 @@
     }
   }
 }
+
+.device-background {
+  width: 100%;
+  min-height: calc(100vh - 64px);
+  background: var(--mat-sys-surface);
+}

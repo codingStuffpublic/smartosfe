@@ -1,0 +1,47 @@
+<div class="settings-container">
+
+  <mat-list>
+    <mat-list-item (click)="toggleSection('theme')">
+      <mat-icon matListItemIcon>palette</mat-icon>
+      <span matListItemTitle>Arculatváltás</span>
+      <div matListItemMeta>
+        <mat-icon>{{ expandedSection === 'theme' ? 'expand_less' : 'expand_more' }}</mat-icon>
+      </div>
+    </mat-list-item>
+
+    @if (expandedSection === 'theme') {
+      <div class="section">
+        @for (theme of themes; track theme) {
+          <button mat-button (click)="setTheme(theme)">
+            <mat-icon>circle</mat-icon>{{ theme }}
+          </button>
+        }
+      </div>
+    }
+
+    <mat-list-item (click)="toggleSection('background')">
+      <mat-icon matListItemIcon>image</mat-icon>
+      <span matListItemTitle>Háttérképek</span>
+      <div matListItemMeta>
+        <mat-icon>{{ expandedSection === 'background' ? 'expand_less' : 'expand_more' }}</mat-icon>
+      </div>
+    </mat-list-item>
+
+    @if (expandedSection === 'background') {
+  <div class="section">
+    @for (bg of backgrounds(); track bg) {
+      <button mat-button (click)="selectBackground(bg)">
+        <mat-icon>image</mat-icon>{{ bg }}
+      </button>
+    }
+    <div class="add-background">
+      <input [(ngModel)]="newBackground" placeholder="Háttérkép neve" />
+      <button mat-raised-button color="primary" (click)="addBackground()">
+        <mat-icon>add</mat-icon> Hozzáadás
+      </button>
+    </div>
+  </div>
+}
+  </mat-list>
+
+</div>

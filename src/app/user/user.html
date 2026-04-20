@@ -10,6 +10,7 @@
     @if(user()?.isAdmin) {
         <button mat-button (click)="addUser()">Felhasználó hozzáadása</button>
     }
+    <a mat-button routerLink="settings">Beállítások</a>
     @if(user()?.isAdmin) {
     <button mat-button (click)="simulate()">Szimuláció</button>
 }

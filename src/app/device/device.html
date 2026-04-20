@@ -10,15 +10,15 @@
         @if (openFolderId === item.id) {
           <div class="dropdown">
             @for (sub of item.subItems; track sub.id) {
-              <button mat-menu-item>
-                <mat-icon>{{ sub.iconName ?? 'apps' }}</mat-icon>
-                {{ sub.name }}
-              </button>
+              <button mat-menu-item (click)="launchApp(sub.name)">
+  <mat-icon>{{ sub.iconName ?? 'apps' }}</mat-icon>
+  {{ sub.name }}
+</button>
             }
           </div>
         }
       } @else {
-        <button mat-button>
+        <button mat-button (click)="launchApp(item.name)">
           <mat-icon>{{ item.iconName ?? 'apps' }}</mat-icon>
           {{ item.name }}
         </button>

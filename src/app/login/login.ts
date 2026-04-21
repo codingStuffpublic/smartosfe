@@ -23,10 +23,15 @@ export class Login {
 
   onLogin() {
     this.userService.getUser(this.enteredUsername).subscribe(
-      () => {
-        this.navigateAndSave(this.enteredUsername);
-      }
-    );
+       {
+    next: () => this.navigateAndSave(this.enteredUsername),
+    error: () => alert('Nem létező felhasználó!')
+  });
+      
+    //  () => {
+     //   this.navigateAndSave(this.enteredUsername);
+      //}
+   // );
   }
 
   onCreateGroup() {

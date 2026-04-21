@@ -2,6 +2,7 @@ export interface IUser {
     name: string;
     isAdmin: boolean;
     background: string;
+    theme: string;
     menuItems: IMenuItem[];
 }
 

@@ -7,7 +7,7 @@
       </mat-form-field>
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Csoport</mat-label>
-        <input matInput [(ngModel)]="registeredGroupname" />
+        <input matInput [(ngModel)]="registeredGroupname" (keyup.enter)="onCreateGroup()"/>
       </mat-form-field>
 
       <div class="button-container">
@@ -22,7 +22,7 @@
     <mat-card-content>
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Név</mat-label>
-        <input matInput [(ngModel)]="enteredUsername" />
+        <input matInput [(ngModel)]="enteredUsername" (keyup.enter)="onLogin()"/>
       </mat-form-field>
 
       <div class="button-container">

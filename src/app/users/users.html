@@ -1,19 +1,29 @@
 <mat-list>
-   @for (user of users(); track $index) {
+  @for (user of users(); track $index) {
     <mat-list-item>
-        <div class="row">
-            <span>{{ user.name }}</span>
-
-            <div class="actions">
-                <button mat-icon-button (click)="onAdd(user)">
-                    <mat-icon>add</mat-icon>
-                </button>
-
-                <button mat-icon-button (click)="onDelete(user)">
-                    <mat-icon color="warn">delete</mat-icon>
-                </button>
-            </div>
-        </div>
+      <div class="row">
+        @if (editingName === user.name) {
+          <input [(ngModel)]="editingValue" (keyup.enter)="saveEdit(user)" />
+          <div class="actions">
+            <button mat-icon-button (click)="saveEdit(user)">
+              <mat-icon>check</mat-icon>
+            </button>
+            <button mat-icon-button (click)="onDelete(user)">
+              <mat-icon color="warn">delete</mat-icon>
+            </button>
+          </div>
+        } @else {
+          <span>{{ user.name }}</span>
+          <div class="actions">
+            <button mat-icon-button (click)="startEdit(user)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="onDelete(user)">
+              <mat-icon color="warn">delete</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
     </mat-list-item>
-    }
+  }
 </mat-list>

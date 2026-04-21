@@ -44,21 +44,30 @@ selectItem(item: IMenuItem) {
   }
 
  addApp(application: IApplication) {
-    if (this.selectedItem && !this.selectedItem.application) {
-        this.http.post(`/api/menu/${this.selectedItem.id}/app/${application.id}`, null)
-            .subscribe(() => this.loadMenu());
-    } else {
-        this.http.post('/api/menu/app', [application.id]).subscribe(() => this.loadMenu());
-    }
+console.log('selectedItem:', this.selectedItem)
+ 
+ 
+  if (this.selectedItem) {
+    this.http.post(`/api/menu/${this.selectedItem.id}/app/${application.id}`, null)
+      .subscribe(() => this.loadMenu());
+  } else {
+    this.http.post('/api/menu/app', null, { 
+      params: { appId: application.id } 
+    }).subscribe(() => this.loadMenu());
+  }
 }
 
-  createFolder() {
-    if (!this.newFolderName.trim()) return;
-    this.http.post('/api/menu/folder', [], { params: { folderName: this.newFolderName } }).subscribe(() => {
-      this.newFolderName = '';
-      this.loadMenu();
-    });
-  }
+createFolder() {
+  if (!this.newFolderName.trim()) return;
+  
+  this.http.post('/api/menu/folder', null, { 
+    params: { folderName: this.newFolderName } 
+  }).subscribe(() => {
+    this.newFolderName = '';
+    this.loadMenu();
+  });
+
+}
 
 toggleFolder(id: number) {
     if (this.expandedFolderIds.has(id)) {

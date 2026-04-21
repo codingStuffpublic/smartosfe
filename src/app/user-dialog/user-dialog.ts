@@ -24,6 +24,7 @@ export class UserDialog {
       name: this.name,
       isAdmin: false,
       background: '',
+      theme: 'LIGHT',
       menuItems: []
     };
     this.userService.createUser(user).subscribe({

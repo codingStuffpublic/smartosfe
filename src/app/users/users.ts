@@ -35,12 +35,17 @@ export class Users implements OnInit {
     this.editingValue = user.name;
   }
 
-  saveEdit(user: IUser) {
+ saveEdit(user: IUser) {
   this.http.put(`/api/users/${user.name}`, null, {
     params: { newName: this.editingValue }
   }).subscribe(() => {
     this.editingName = null;
+    const loggedInUser = localStorage.getItem('username');
+    if (loggedInUser === user.name) {
+      localStorage.setItem('username', this.editingValue);
+    }
     this.loadUsers();
   });
+
 }
 }
